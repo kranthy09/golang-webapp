@@ -11,7 +11,7 @@ var portNumber = ":8080"
 
 func main() {
 	http.HandleFunc("/", handlers.Home)
-	http.HandleFunc("/", handlers.About)
+	http.HandleFunc("/about", handlers.About)
 	fmt.Printf("Starting server at portNumber: %v", portNumber)
 	http.ListenAndServe(portNumber, nil)
 }
