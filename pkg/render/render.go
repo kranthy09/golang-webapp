@@ -7,29 +7,33 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/kranthy09/go-course/pkg/config"
 )
+
+var app *config.AppConfig
+
+func NewTemplate(a *config.AppConfig) {
+	app = a
+}
 
 var functions = template.FuncMap{}
 
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
 
-	tc, err := CreateTemplateCache()
-	fmt.Println("tc:", tc)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	tc := app.TemplateCache
+	fmt.Println("tc: ", tc)
 	t, ok := tc[tmpl]
 
 	if !ok {
-		log.Fatal(err)
+		log.Fatal("cannot cache template in render go")
 	}
 
 	buf := new(bytes.Buffer)
 
 	_ = t.Execute(buf, nil)
 
-	_, err = buf.WriteTo(w)
+	_, err := buf.WriteTo(w)
 
 	if err != nil {
 		fmt.Println("error while writing the template", err)
@@ -40,6 +44,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
 
 	pages, err := filepath.Glob("./templates/*.page.tmpl")
+	fmt.Println("pages:", pages)
 	if err != nil {
 		return myCache, err
 	}
