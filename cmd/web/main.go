@@ -19,16 +19,17 @@ func main() {
 		log.Fatal("cannot cache template in main.go", err)
 	}
 
-	fmt.Println("tc:", tc)
-
 	app.TemplateCache = tc
 
-	fmt.Println("app:", app)
+	repo := handlers.NewRepo(&app)
+	handlers.NewHandlers(repo)
 
 	render.NewTemplate(&app)
 
-	http.HandleFunc("/", handlers.Home)
-	http.HandleFunc("/about", handlers.About)
 	fmt.Printf("Starting server at portNumber: %v", portNumber)
-	http.ListenAndServe(portNumber, nil)
+	srv := &http.Server{
+		Addr:    portNumber,
+		Handler: routes(&app),
+	}
+	srv.ListenAndServe()
 }
