@@ -1,2 +1,5 @@
 # golang-learning-webapp
-building a webapp using go lang for backend and HTML, CSS and JS for front end
+- Built in go 1.16.4
+- Uses the chi rounter
+- Uses alex edwards SCS session management
+- Uses nosurf
